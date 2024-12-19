@@ -1,0 +1,387 @@
+     1                                  section .data
+     2 00000000 506C6561736520656E-         name db "Please enter your first and last names: ", 0  ; Prompt for user name
+     2 00000009 74657220796F757220-
+     2 00000012 666972737420616E64-
+     2 0000001B 206C617374206E616D-
+     2 00000024 65733A2000         
+     3 00000029 506C6561736520656E-         title db "Please enter your title such as Lieutenant, Chef, Mr, Ms, Influencer, Chairman, Freshman, Foreman, Project Leader, etc: ", 0  ; Prompt for user title
+     3 00000032 74657220796F757220-
+     3 0000003B 7469746C6520737563-
+     3 00000044 68206173204C696575-
+     3 0000004D 74656E616E742C2043-
+     3 00000056 6865662C204D722C20-
+     3 0000005F 4D732C20496E666C75-
+     3 00000068 656E6365722C204368-
+     3 00000071 6169726D616E2C2046-
+     3 0000007A 726573686D616E2C20-
+     3 00000083 466F72656D616E2C20-
+     3 0000008C 50726F6A656374204C-
+     3 00000095 65616465722C206574-
+     3 0000009E 633A2000           
+     4 000000A2 5468616E6B20796F75-         thankyou_msg db "Thank you %s %s ", 10, 0  ; Thank you message
+     4 000000AB 202573202573200A00 
+     5 000000B4 496E76616C69642064-         invalid_response db "Invalid data detected. Try again", 0  ; Error message
+     5 000000BD 617461206465746563-
+     5 000000C6 7465642E2054727920-
+     5 000000CF 616761696E00       
+     6                                  
+     7 000000D5 456E74657220746865-         prompt_miles1 db "Enter the number of miles traveled from Fullerton to Santa Ana: ", 0  ; Miles (first leg)
+     7 000000DE 206E756D626572206F-
+     7 000000E7 66206D696C65732074-
+     7 000000F0 726176656C65642066-
+     7 000000F9 726F6D2046756C6C65-
+     7 00000102 72746F6E20746F2053-
+     7 0000010B 616E746120416E613A-
+     7 00000114 2000               
+     8 00000116 456E74657220796F75-         prompt_speed1 db "Enter your average speed during that leg of the trip: ", 0  ; Speed (first leg)
+     8 0000011F 722061766572616765-
+     8 00000128 207370656564206475-
+     8 00000131 72696E672074686174-
+     8 0000013A 206C6567206F662074-
+     8 00000143 686520747269703A20-
+     8 0000014C 00                 
+     9 0000014D 456E74657220746865-         prompt_miles2 db "Enter the number of miles traveled from Santa Ana to Long Beach: ", 0  ; Miles (second leg)
+     9 00000156 206E756D626572206F-
+     9 0000015F 66206D696C65732074-
+     9 00000168 726176656C65642066-
+     9 00000171 726F6D2053616E7461-
+     9 0000017A 20416E6120746F204C-
+     9 00000183 6F6E67204265616368-
+     9 0000018C 3A2000             
+    10 0000018F 456E74657220796F75-         prompt_speed2 db "Enter your average speed during that leg of the trip: ", 0  ; Speed (second leg)
+    10 00000198 722061766572616765-
+    10 000001A1 207370656564206475-
+    10 000001AA 72696E672074686174-
+    10 000001B3 206C6567206F662074-
+    10 000001BC 686520747269703A20-
+    10 000001C5 00                 
+    11 000001C6 456E74657220746865-         prompt_miles3 db "Enter the number of miles traveled from Long Beach to Fullerton: ", 0  ; Miles (third leg)
+    11 000001CF 206E756D626572206F-
+    11 000001D8 66206D696C65732074-
+    11 000001E1 726176656C65642066-
+    11 000001EA 726F6D204C6F6E6720-
+    11 000001F3 426561636820746F20-
+    11 000001FC 46756C6C6572746F6E-
+    11 00000205 3A2000             
+    12 00000208 456E74657220796F75-         prompt_speed3 db "Enter your average speed during that leg of the trip: ", 0  ; Speed (third leg)
+    12 00000211 722061766572616765-
+    12 0000021A 207370656564206475-
+    12 00000223 72696E672074686174-
+    12 0000022C 206C6567206F662074-
+    12 00000235 686520747269703A20-
+    12 0000023E 00                 
+    13 0000023F 54686520696E707574-         process_msg db "The inputted data are being processed", 10, 0  ; Processing message
+    13 00000248 746564206461746120-
+    13 00000251 617265206265696E67-
+    13 0000025A 2070726F6365737365-
+    13 00000263 640A00             
+    14 00000266 54686520746F74616C-         total_distance_msg db "The total distance traveled is %.2f miles", 10, 0  ; Total distance output
+    14 0000026F 2064697374616E6365-
+    14 00000278 2074726176656C6564-
+    14 00000281 20697320252E326620-
+    14 0000028A 6D696C65730A00     
+    15 00000291 5468652074696D6520-         total_time_msg db "The time of the trip is %.2f hours", 10, 0  ; Total time output
+    15 0000029A 6F6620746865207472-
+    15 000002A3 697020697320252E32-
+    15 000002AC 6620686F7572730A00 
+    16 000002B5 546865206176657261-         average_speed_msg db "The average speed during this trip is %.2f mph", 10, 0  ; Average speed output
+    16 000002BE 676520737065656420-
+    16 000002C7 647572696E67207468-
+    16 000002D0 697320747269702069-
+    16 000002D9 7320252E3266206D70-
+    16 000002E2 680A00             
+    17                                  
+    18 000002E5 257300                      stringform db "%s", 0  ; Format string
+    19                                  
+    20                                  section .bss
+    21 00000000 <res 00000028>              username resb 40  ; Buffer for username
+    22 00000028 <res 00000028>              newTitle resb 40  ; Buffer for title
+    23 00000050 <res 00000028>              mile1 resb 40  ; Buffer for miles (first leg)
+    24 00000078 <res 00000028>              mile2 resb 40  ; Buffer for miles (second leg)
+    25 000000A0 <res 00000028>              mile3 resb 40  ; Buffer for miles (third leg)
+    26 000000C8 <res 00000028>              speed1 resb 40  ; Buffer for speed (first leg)
+    27 000000F0 <res 00000028>              speed2 resb 40  ; Buffer for speed (second leg)
+    28 00000118 <res 00000028>              speed3 resb 40  ; Buffer for speed (third leg)
+    29 00000140 <res 00000008>              total_distance resq 1  ; Variable for total distance
+    30 00000148 <res 00000008>              total_time resq 1  ; Variable for total time
+    31 00000150 <res 00000008>              average_speed resq 1  ; Variable for average speed
+    32                                  
+    33                                  section .text
+    34                                      global average, isfloat  ; Declare functions as global
+    35                                      extern printf, fgets, strlen, stdin, atof  ; Import external functions
+    36                                  
+    37                                  average:
+    38 00000000 55                          push rbp  ; Save the base pointer
+    39 00000001 4889E5                      mov rbp, rsp  ; Establish a new base pointer
+    40 00000004 57                          push rdi  ; Save callee-saved registers 
+    41 00000005 56                          push rsi
+    42 00000006 52                          push rdx
+    43 00000007 4150                        push r8
+    44 00000009 4151                        push r9
+    45 0000000B 4152                        push r10
+    46 0000000D 4153                        push r11
+    47 0000000F 4154                        push r12
+    48 00000011 4155                        push r13
+    49 00000013 4156                        push r14
+    50 00000015 4157                        push r15
+    51 00000017 9C                          pushf  ; Save flags
+    52                                  
+    53                                      ; username call
+    54 00000018 B800000000                  mov rax, 0  ;
+    55 0000001D 48BF-                       mov rdi, name  ; 
+    55 0000001F [0000000000000000] 
+    56 00000027 E8(00000000)                call printf  ; Print the name prompt
+    57                                  
+    58                                      ; username read input
+    59 0000002C B800000000                  mov rax, 0  ; 
+    60 00000031 48BF-                       mov rdi, username  ; 
+    60 00000033 [0000000000000000] 
+    61 0000003B BE27000000                  mov rsi, 39  ; Max  length
+    62 00000040 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+    63 00000048 E8(00000000)                call fgets  ; Read input 
+    64                                  
+    65 0000004D B800000000                  mov rax, 0  ; 
+    66 00000052 48BF-                       mov rdi, username  ; 
+    66 00000054 [0000000000000000] 
+    67 0000005C E8(00000000)                call strlen  ; Get length of the username
+    68 00000061 C680[FFFFFFFF]00            mov [username+rax-1], byte 0  ; Null-terminate the string
+    69                                  
+    70                                      ; title - Print prompt for title
+    71 00000068 B800000000                  mov rax, 0  ; 
+    72 0000006D 48BF-                       mov rdi, title  ; Set prompt for title
+    72 0000006F [2900000000000000] 
+    73 00000077 E8(00000000)                call printf  ; Print title prompt
+    74                                  
+    75                                      ; title - Read title 
+    76 0000007C B800000000                  mov rax, 0  ; 
+    77 00000081 48BF-                       mov rdi, newTitle  ; 
+    77 00000083 [2800000000000000] 
+    78 0000008B BE27000000                  mov rsi, 39  ; Max  length
+    79 00000090 488B1425[00000000]          mov rdx, [stdin]  ; 
+    80 00000098 E8(00000000)                call fgets  ; Read input 
+    81                                  
+    82 0000009D B800000000                  mov rax, 0  ; 
+    83 000000A2 48BF-                       mov rdi, newTitle  ; 
+    83 000000A4 [2800000000000000] 
+    84 000000AC E8(00000000)                call strlen  ; Get length of the title
+    85 000000B1 C680[27000000]00            mov [newTitle+rax-1], byte 0  ; Null-terminate the string
+    86                                  
+    87                                      ; thank you
+    88 000000B8 B800000000                  mov rax, 0  ; Clear rax
+    89 000000BD 48BF-                       mov rdi, thankyou_msg  ; Set thank you message
+    89 000000BF [A200000000000000] 
+    90 000000C7 48BE-                       mov rsi, newTitle  ; Title argument
+    90 000000C9 [2800000000000000] 
+    91 000000D1 48BA-                       mov rdx, username  ; Username argument
+    91 000000D3 [0000000000000000] 
+    92 000000DB E8(00000000)                call printf  ; Print thank you message
+    93                                  
+    94                                      ; prompt_miles1 response
+    95 000000E0 B800000000                  mov rax, 0  ; 
+    96 000000E5 48BF-                       mov rdi, prompt_miles1  ; 
+    96 000000E7 [D500000000000000] 
+    97 000000EF E8(00000000)                call printf  ; Print the prompt
+    98                                  
+    99                                      ; prompt_miles1 read input
+   100 000000F4 B800000000                  mov rax, 0  ; 
+   101 000000F9 48BF-                       mov rdi, mile1  ; 
+   101 000000FB [5000000000000000] 
+   102 00000103 BE27000000                  mov rsi, 39  ; Max  length
+   103 00000108 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   104 00000110 E8(00000000)                call fgets  ; Read input 
+   105                                  
+   106                                      ; Convert mile1 input to float
+   107 00000115 488B0425[50000000]          mov rax, [mile1]  ;  mile1 input
+   108 0000011D E8(00000000)                call atof  ; Convert string to float
+   109 00000122 660FD60425-                 movq [mile1], xmm0  ; Store as float
+   109 00000127 [50000000]         
+   110                                  
+   111                                      ; prompt_speed1 print
+   112 0000012B B800000000                  mov rax, 0  ; 
+   113 00000130 48BF-                       mov rdi, prompt_speed1  ; 
+   113 00000132 [1601000000000000] 
+   114 0000013A E8(00000000)                call printf  ; Print the prompt
+   115                                  
+   116                                      ; prompt_speed1 read input
+   117 0000013F B800000000                  mov rax, 0  ; 
+   118 00000144 48BF-                       mov rdi, speed1  ; 
+   118 00000146 [C800000000000000] 
+   119 0000014E BE27000000                  mov rsi, 39  ; Max  length
+   120 00000153 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   121 0000015B E8(00000000)                call fgets  ; Read input 
+   122                                  
+   123                                      ; Convert speed1 input to float
+   124 00000160 488B0425[C8000000]          mov rax, [speed1]  ; 
+   125 00000168 E8(00000000)                call atof  ; Convert string to float
+   126 0000016D 660FD60425-                 movq [speed1], xmm0  ; Store as float
+   126 00000172 [C8000000]         
+   127                                  
+   128                                      ; prompt_miles2 response
+   129 00000176 B800000000                  mov rax, 0  ; 
+   130 0000017B 48BF-                       mov rdi, prompt_miles2  ; 
+   130 0000017D [4D01000000000000] 
+   131 00000185 E8(00000000)                call printf  ; Print the prompt
+   132                                  
+   133                                      ; prompt_miles2 read input
+   134 0000018A B800000000                  mov rax, 0  ; 
+   135 0000018F 48BF-                       mov rdi, mile2  ; 
+   135 00000191 [7800000000000000] 
+   136 00000199 BE27000000                  mov rsi, 39  ; Max input length
+   137 0000019E 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   138 000001A6 E8(00000000)                call fgets  ; Read input 
+   139                                  
+   140                                      ; Convert mile2 input to float
+   141 000001AB 488B0425[78000000]          mov rax, [mile2]  ;  mile2 input
+   142 000001B3 E8(00000000)                call atof  ; Convert string to float
+   143 000001B8 660FD60425-                 movq [mile2], xmm0  ; Store as float
+   143 000001BD [78000000]         
+   144                                  
+   145                                      ; prompt_speed2 print
+   146 000001C1 B800000000                  mov rax, 0  ; 
+   147 000001C6 48BF-                       mov rdi, prompt_speed2  ; 
+   147 000001C8 [8F01000000000000] 
+   148 000001D0 E8(00000000)                call printf  ; Print the prompt
+   149                                  
+   150                                      ; prompt_speed2 read input
+   151 000001D5 B800000000                  mov rax, 0  ;
+   152 000001DA 48BF-                       mov rdi, speed2  ; 
+   152 000001DC [F000000000000000] 
+   153 000001E4 BE27000000                  mov rsi, 39  ; Max  length
+   154 000001E9 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   155 000001F1 E8(00000000)                call fgets  ; Read input 
+   156                                  
+   157                                      ; Convert speed2 input to float
+   158 000001F6 488B0425[F0000000]          mov rax, [speed2]  ;  speed2 input
+   159 000001FE E8(00000000)                call atof  ; Convert string to float
+   160 00000203 660FD60425-                 movq [speed2], xmm0  ; Store as float
+   160 00000208 [F0000000]         
+   161                                  
+   162                                      ; prompt_miles3 response
+   163 0000020C B800000000                  mov rax, 0  ;
+   164 00000211 48BF-                       mov rdi, prompt_miles3  ; 
+   164 00000213 [C601000000000000] 
+   165 0000021B E8(00000000)                call printf  ; Print the prompt
+   166                                      
+   167                                      ; prompt_miles3 read input
+   168 00000220 B800000000                  mov rax, 0  ; 
+   169 00000225 48BF-                       mov rdi, mile3  ; 
+   169 00000227 [A000000000000000] 
+   170 0000022F BE27000000                  mov rsi, 39  ; Max input length
+   171 00000234 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   172 0000023C E8(00000000)                call fgets  ; Read input 
+   173                                  
+   174                                      ; Convert mile3 input to float
+   175 00000241 488B0425[A0000000]          mov rax, [mile3]  ;  mile3 input
+   176 00000249 E8(00000000)                call atof  ; Convert string to float
+   177 0000024E 660FD60425-                 movq [mile3], xmm0  ; Store as float
+   177 00000253 [A0000000]         
+   178                                  
+   179                                      ; prompt_speed3 print
+   180 00000257 B800000000                  mov rax, 0  ; 
+   181 0000025C 48BF-                       mov rdi, prompt_speed3  ; 
+   181 0000025E [0802000000000000] 
+   182 00000266 E8(00000000)                call printf  ; Print the prompt
+   183                                  
+   184                                      ; prompt_speed3 read input
+   185 0000026B B800000000                  mov rax, 0  ; 
+   186 00000270 48BF-                       mov rdi, speed3  ; 
+   186 00000272 [1801000000000000] 
+   187 0000027A BE27000000                  mov rsi, 39  ; Max length 
+   188 0000027F 488B1425[00000000]          mov rdx, [stdin]  ; Input from standard input
+   189 00000287 E8(00000000)                call fgets  ; Read input 
+   190                                  
+   191                                      ; Convert speed3 input to float
+   192 0000028C 488B0425[18010000]          mov rax, [speed3]  ;  speed3 input
+   193 00000294 E8(00000000)                call atof  ; Convert string to float
+   194 00000299 660FD60425-                 movq [speed3], xmm0  ; Store as float
+   194 0000029E [18010000]         
+   195                                  
+   196                                      ; process_msg print
+   197 000002A2 B800000000                  mov rax, 0  ; 
+   198 000002A7 48BF-                       mov rdi, process_msg  ; Set processing message
+   198 000002A9 [3F02000000000000] 
+   199 000002B1 E8(00000000)                call printf  ; Print processing message
+   200                                  
+   201                                      ; Calculate total distance
+   202 000002B6 F30F7E0425-                 movq xmm0, [mile1]  ;  first mile
+   202 000002BB [50000000]         
+   203 000002BF F20F580425-                 addsd xmm0, [mile2]  ; Add second mile
+   203 000002C4 [78000000]         
+   204 000002C8 F20F580425-                 addsd xmm0, [mile3]  ; Add third mile
+   204 000002CD [A0000000]         
+   205 000002D1 F20F110425-                 movsd [total_distance], xmm0  ; Store total distance
+   205 000002D6 [40010000]         
+   206                                  
+   207                                      ; Calculate total time
+   208 000002DA F30F7E0C25-                 movq xmm1, [mile1]  ;  first mile
+   208 000002DF [50000000]         
+   209 000002E3 F30F7E1425-                 movq xmm2, [speed1]  ;  first speed
+   209 000002E8 [C8000000]         
+   210 000002EC F20F5ECA                    divsd xmm1, xmm2  ; Calculate 
+   211                                  
+   212 000002F0 F30F7E1425-                 movq xmm2, [mile2]  ;  second mile
+   212 000002F5 [78000000]         
+   213 000002F9 F30F7E1C25-                 movq xmm3, [speed2]  ;  second speed
+   213 000002FE [F0000000]         
+   214 00000302 F20F5ED3                    divsd xmm2, xmm3  ; Calculate 
+   215 00000306 F20F58CA                    addsd xmm1, xmm2  ; Add second leg time
+   216                                  
+   217 0000030A F30F7E1425-                 movq xmm2, [mile3]  ;  third mile
+   217 0000030F [A0000000]         
+   218 00000313 F30F7E1C25-                 movq xmm3, [speed3]  ;  third speed
+   218 00000318 [18010000]         
+   219 0000031C F20F5ED3                    divsd xmm2, xmm3  ; Calculate 
+   220 00000320 F20F58CA                    addsd xmm1, xmm2  ; Add third leg time
+   221 00000324 F20F110C25-                 movsd [total_time], xmm1  ; Store total time
+   221 00000329 [48010000]         
+   222                                  
+   223                                      ; Calculate average speed
+   224 0000032D F30F7E0425-                 movq xmm0, [total_distance]  ;  total distance
+   224 00000332 [40010000]         
+   225 00000336 F30F7E0C25-                 movq xmm1, [total_time]  ;  total time
+   225 0000033B [48010000]         
+   226 0000033F F20F5EC1                    divsd xmm0, xmm1  ; Calculate 
+   227 00000343 F20F110425-                 movsd [average_speed], xmm0  ; Store average speed
+   227 00000348 [50010000]         
+   228                                  
+   229                                      ; Output total distance
+   230 0000034C 48BF-                       mov rdi, total_distance_msg  ;  message for total distance
+   230 0000034E [6602000000000000] 
+   231 00000356 F20F100425-                 movsd xmm0, [total_distance]  ;  total distance
+   231 0000035B [40010000]         
+   232 0000035F E8(00000000)                call printf  ; Print total distance
+   233                                  
+   234                                      ; Output total time
+   235 00000364 48BF-                       mov rdi, total_time_msg  ;  message for total time
+   235 00000366 [9102000000000000] 
+   236 0000036E F20F100425-                 movsd xmm0, [total_time]  ;  total time
+   236 00000373 [48010000]         
+   237 00000377 E8(00000000)                call printf  ; Print total time
+   238                                  
+   239                                      ; Output average speed
+   240 0000037C 48BF-                       mov rdi, average_speed_msg  ;  message for average speed
+   240 0000037E [B502000000000000] 
+   241 00000386 F20F100425-                 movsd xmm0, [average_speed]  ;  average speed
+   241 0000038B [50010000]         
+   242 0000038F E8(00000000)                call printf  ; Print average speed
+   243                                  
+   244                                      ; Restore GPRs
+   245 00000394 9D                          popf  ; Restore flags
+   246 00000395 415F                        pop r15  
+   247 00000397 415E                        pop r14 
+   248 00000399 415D                        pop r13 
+   249 0000039B 415C                        pop r12 
+   250 0000039D 415B                        pop r11 
+   251 0000039F 415A                        pop r10 
+   252 000003A1 4159                        pop r9 
+   253 000003A3 4158                        pop r8 
+   254 000003A5 5A                          pop rdx 
+   255 000003A6 5E                          pop rsi 
+   256 000003A7 5F                          pop rdi 
+   257 000003A8 48B8-                       mov rax, average_speed  ; Set return value to average_speed buffer
+   257 000003AA [5001000000000000] 
+   258                                  
+   259                                      ; Restore the stack and return
+   260 000003B2 4889EC                      mov rsp, rbp
+   261 000003B5 5D                          pop rbp
+   262 000003B6 C3                          ret
